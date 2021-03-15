@@ -92,10 +92,10 @@ def calc_covariation(x, y, tau):
     cov = 0
     mx = calc_avg(x)
     my = calc_avg(y)
-    for i in range(max_tic + 1):
+    for i in range(max_tic + 1):   #для обчислення кореляції цикл спочатку проходиться по N, тобто max_tic точкам
         val = (x[i] - mx)*(y[i + tau] - my)
         cov += val
-    cov = cov/(max_tic - 1)
+    cov = cov/(max_tic - 1)    #отримане значення ділиться на N - 1, тобто max_tic - 1
     return cov
 
 #setting parameters
@@ -118,14 +118,14 @@ print("deviation: ", calc_dev(signal))
 
 def build_auto_cor():
     covs = []
-    for tau in range(max_tau + 1):
+    for tau in range(max_tau + 1):  #кореляція обчислюється для значень tau від 0 до max_tau за допомогою циклу(1)
         covs.append(calc_covariation(signal, signal, tau))
     
     plot_cov(covs, max_tau + 1, True)
 
 def build_cor():
     covs = []
-    for tau in range(max_tau + 1):
+    for tau in range(max_tau + 1):  #кореляція обчислюється для значень tau від 0 до max_tau за допомогою циклу(2)
         covs.append(calc_covariation(signal, signal_copy, tau))
     
     plot_cov(covs, max_tau + 1, False)
