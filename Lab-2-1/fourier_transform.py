@@ -2,6 +2,7 @@ import random
 import math
 import matplotlib.pyplot as plt
 import time
+import numpy as np
 
 n = 8
 tics = 1024
@@ -63,6 +64,18 @@ def plot_N(x, times):
     plt.title('Графік залежності складності обчислень від часу') 
     plt.show()
 
+def plot_multiple(x, times, times_numpy):
+    fig, axs = plt.subplots(2)
+    fig.suptitle('Графік залежності складності обчислень від часу')
+    axs[0].plot(x, times, color = '#F67280')
+    axs[1].plot(x, times_numpy, color = '#6C5B7B')
+    plt.xlabel('час - кількість дискретних відліків')
+    for ax in axs.flat:
+        ax.set(ylabel='час обчислення')
+    axs[0].set_title('dft')
+    axs[1].set_title('numpy')
+    plt.show()
+
 
 #main part - function for calculation
 
@@ -75,16 +88,18 @@ def fourier_transform(x):
             w_num = p*k*2*math.pi/N
             w = math.cos(w_num) - math.sin(w_num)*1j
             res += x[k] * w
-        f.append(abs(res))
+        #f.append(abs(res))
+        f.append(res)
     return f
 
-plot_f(fourier_transform(signal))
 
-#building time complexity
+#building time complexity, comparing with numpy dft
 
 min_ticks = 100
 max_tick = 5000
+
 times = []
+times_numpy = []
 N = []
 
 for tic in range(min_ticks, max_tick+1, 100):
@@ -93,8 +108,12 @@ for tic in range(min_ticks, max_tick+1, 100):
 
     start_time = time.perf_counter()
     fourier_transform(signal)
-
     end_time = time.perf_counter()
     times.append(end_time - start_time)
 
-plot_N(N, times)
+    start_time_numpy = time.perf_counter()
+    np.fft.fft(signal)
+    end_time_numpy = time.perf_counter()
+    times_numpy.append(end_time_numpy - start_time_numpy)
+
+plot_multiple(N, times, times_numpy)
