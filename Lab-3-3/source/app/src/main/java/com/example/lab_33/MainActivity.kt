@@ -11,7 +11,7 @@ import kotlin.math.absoluteValue
 
 
 class MainActivity : AppCompatActivity() {
-    
+    var mutationChance: Int = 0
     private fun gen_alg(x1_base: Double,
                     x2_base: Double,
                     x3_base: Double,
@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
         val listOfFitnesses: MutableList<Double> = mutableListOf()
         val populationOfChild: MutableList<MutableList<Double>> = mutableListOf()
         var bestPopulation: MutableList<Double> = mutableListOf()
+
 
         fun fitness(population: MutableList<Double>): Double {
             val fitness: Double = y_base -
@@ -102,6 +103,11 @@ class MainActivity : AppCompatActivity() {
                             c.add(populationOfChild[p][j])
                         } else c.add(populationOfChild[p - 1][j])
                 }
+                
+                val rand: Int = (1..100).random()
+                if (rand < mutationChance){
+                    populationOfChild[0][0]++
+                }
                 population.add(c)
             }
         }
@@ -164,6 +170,7 @@ class MainActivity : AppCompatActivity() {
         val input_c: EditText = findViewById(R.id.input_data_c)
         val input_d: EditText = findViewById(R.id.input_data_d)
         val input_y: EditText = findViewById(R.id.input_data_y)
+        val input_chance: EditText = findViewById(R.id.mutation_chance)
 
         val buttonCalculate: Button = findViewById(R.id.button_calculate)
         buttonCalculate.setOnClickListener {
@@ -175,6 +182,7 @@ class MainActivity : AppCompatActivity() {
                 val c = input_c.text.toString().toDouble()
                 val d = input_d.text.toString().toDouble()
                 val y = input_y.text.toString().toDouble()
+                mutationChance = input_chance.text.toString().toInt()
 
                 val ans = gen_alg(a, b, c, d, y)
 
